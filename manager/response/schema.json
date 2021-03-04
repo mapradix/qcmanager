@@ -1,0 +1,2016 @@
+{
+ "$schema": "http://json-schema.org/draft-04/schema#",
+ "title": "GeoJSON encoding of OGC 17-003 Earth Observation Metadata",
+ "version": "1.1.3",
+ "description": "update 1.0.1 Definition of EO Dataset document.  Note that numbers in the instance should not be surrounded by double-quotes to validate against this schema. update types RasterInformation.bits, columns, rows from Integer to Boolean, update DetailedControlInformation pixels renamed to validPixels, update 1.0.2 add quality information for Land Products based on SDD 1.0 with few updates see SDD 1.1 draft,update 1.0.3 add CoverageControlInformation from information in Mapradix metadata attributes (live document). Correct check numbers associated to processing steps, 1.0.4c rename CoverageControlInformation by IpForLpInformation and coverageControlMetric by ipForLpInformationMetric, update 1.1.0 to add extension needed to multi sensors (landsat tiles)., update 1.1.1 correct inconsistency with the example for the object ReferenceInformation,update 1.1.2 codingClasses becomes an array of strings instead of undefined object,update 1.1.3 densityCover replaces density in the LpInterpretationInformation, CloudCoverInformation add waterPct and validPct, HarmonizationControlInformation rename radiometry to radiometryConsistency rename geometry to geometryConsistency, remove constraint of max 2 elements in codingClasses and confusionMatrix, rename columns to cols, add L1TP L1GT as a value of ProcessingLevel",
+ "$ref": "#/definitions/EarthObservation",
+ "definitions": {
+  "MetadataInformation": {
+   "description": "Subset of Properties",
+   "type": "object",
+   "properties": {
+    "lang": {
+     "description": "RFC3066",
+     "type": "string",
+     "minLength": 2,
+     "maxLength": 3
+    },
+    "updated": {
+     "type": "string",
+     "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]+)?(Z|[\\+\\-][0-9]{2}:[0-9]{2})$",
+     "format": "date-time"
+    },
+    "published": {
+     "type": "string",
+     "format": "date-time"
+    },
+    "creationDate": {
+     "type": "string",
+     "format": "date-time"
+    }
+   },
+   "required": [
+    "updated"
+   ]
+  },
+  "DataIdentification": {
+   "description": "Subset of Properties",
+   "type": "object",
+   "properties": {
+    "parentIdentifier": {
+     "type": "string"
+    },
+    "doi": {
+     "type": "string"
+    },
+    "title": {
+     "type": "string"
+    },
+    "identifier": {
+     "type": "string"
+    },
+    "date": {
+     "type": "string"
+    },
+    "created": {
+     "type": "string",
+     "format": "date-time"
+    },
+    "available": {
+     "type": "string"
+    },
+    "additionalAttributes": {
+     "type": "object",
+     "minProperties": 1
+    }
+   },
+   "required": [
+    "title",
+    "identifier",
+    "date"
+   ]
+  },
+  "ProcessingInformation": {
+   "description": "Subset of ProductInformation",
+   "type": "object",
+   "properties": {
+    "processingLevel": {
+     "type": "string",
+     "enum": [
+      "1A",
+      "1B",
+      "1C",
+      "2",
+      "3",
+      "L1TP",
+      "L1GT"
+     ]
+    },
+    "processorName": {
+     "type": "string"
+    },
+    "processorVersion": {
+     "type": "string"
+    },
+    "processingCenter": {
+     "description": "Codelist",
+     "type": "string"
+    },
+    "processingDate": {
+     "type": "string",
+     "format": "date-time"
+    },
+    "processingMode": {
+     "description": "Codelist",
+     "type": "string"
+    },
+    "compositeType": {
+     "type": "string"
+    },
+    "format": {
+     "type": "string"
+    },
+    "productContentsType": {
+     "type": "string"
+    },
+    "processingMethod": {
+     "type": "string"
+    },
+    "processingMethodVersion": {
+     "type": "string"
+    }
+   }
+  },
+  "Point": {
+   "title": "Point",
+   "type": "object",
+   "properties": {
+    "coordinates": {
+     "title": "gj:coordinates",
+     "description": "One position (longitude, lattitude)",
+     "type": "array",
+     "minItems": 2,
+     "maxItems": 2,
+     "items": {
+      "type": "number"
+     }
+    },
+    "type": {
+     "type": "string",
+     "enum": [
+      "Point"
+     ]
+    }
+   },
+   "required": [
+    "coordinates",
+    "type"
+   ],
+   "additionalProperties": false
+  },
+  "MultiPoint": {
+   "title": "point",
+   "type": "object",
+   "properties": {
+    "coordinates": {
+     "title": "gj:coordinates",
+     "description": "Array of positions",
+     "type": "array",
+     "minItems": 1,
+     "items": [
+      {
+       "description": "One position",
+       "type": "array",
+       "minItems": 2,
+       "maxItems": 2,
+       "items": {
+        "type": "number"
+       }
+      }
+     ],
+     "additionalItems": false
+    },
+    "type": {
+     "type": "string",
+     "enum": [
+      "MultiPoint"
+     ]
+    }
+   },
+   "required": [
+    "coordinates",
+    "type"
+   ],
+   "additionalProperties": false
+  },
+  "LineString": {
+   "title": "LineString",
+   "type": "object",
+   "properties": {
+    "coordinates": {
+     "title": "coordinates",
+     "description": "Array of positions",
+     "type": "array",
+     "minItems": 2,
+     "items": {
+      "description": "One position",
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "items": {
+       "type": "number"
+      }
+     }
+    },
+    "type": {
+     "type": "string",
+     "enum": [
+      "LineString"
+     ]
+    }
+   },
+   "required": [
+    "coordinates",
+    "type"
+   ],
+   "additionalProperties": false
+  },
+  "MultiLineString": {
+   "title": "MultiLineString",
+   "type": "object",
+   "properties": {
+    "coordinates": {
+     "title": "coordinates",
+     "description": "Array of linestring",
+     "type": "array",
+     "minItems": 1,
+     "items": {
+      "description": "Linestring, i.e. array of positions",
+      "type": "array",
+      "minItems": 2,
+      "items": {
+       "description": "Position (longitude, lattitude)",
+       "type": "array",
+       "minItems": 2,
+       "maxItems": 2,
+       "items": {
+        "type": "number"
+       }
+      }
+     }
+    },
+    "type": {
+     "type": "string",
+     "enum": [
+      "MultiLineString"
+     ]
+    }
+   },
+   "required": [
+    "coordinates",
+    "type"
+   ],
+   "additionalProperties": false
+  },
+  "Polygon": {
+   "title": "Polygon",
+   "type": "object",
+   "properties": {
+    "coordinates": {
+     "title": "coordinates",
+     "description": "Array of linestrings",
+     "type": "array",
+     "minItems": 1,
+     "items": {
+      "description": "Linear ring, i.e. linestring or array of positions",
+      "type": "array",
+      "minItems": 1,
+      "items": {
+       "description": "One position",
+       "type": "array",
+       "minItems": 2,
+       "maxItems": 2,
+       "items": {
+        "type": "number"
+       }
+      }
+     }
+    },
+    "type": {
+     "type": "string",
+     "enum": [
+      "Polygon"
+     ]
+    }
+   },
+   "required": [
+    "coordinates",
+    "type"
+   ],
+   "additionalProperties": false
+  },
+  "MultiPolygon": {
+   "title": "MultiPolygon",
+   "type": "object",
+   "properties": {
+    "coordinates": {
+     "title": "coordinates",
+     "description": "Array of Polygons",
+     "type": "array",
+     "minItems": 1,
+     "items": {
+      "description": "Array of linestrings",
+      "type": "array",
+      "minItems": 1,
+      "items": {
+       "description": "Linear ring, i.e. linestring or array of positions",
+       "type": "array",
+       "items": {
+        "description": "One position",
+        "type": "array",
+        "minItems": 2,
+        "maxItems": 2,
+        "items": {
+         "type": "number"
+        }
+       }
+      }
+     }
+    },
+    "type": {
+     "type": "string",
+     "enum": [
+      "MultiPolygon"
+     ]
+    }
+   },
+   "required": [
+    "coordinates",
+    "type"
+   ],
+   "additionalProperties": false
+  },
+  "Geometry": {
+   "title": "Geometry",
+   "type": "object",
+   "oneOf": [
+    {
+     "$ref": "#/definitions/Point"
+    },
+    {
+     "$ref": "#/definitions/MultiPoint"
+    },
+    {
+     "$ref": "#/definitions/LineString"
+    },
+    {
+     "$ref": "#/definitions/MultiLineString"
+    },
+    {
+     "$ref": "#/definitions/Polygon"
+    },
+    {
+     "$ref": "#/definitions/MultiPolygon"
+    }
+   ]
+  },
+  "Links": {
+   "title": "Links",
+   "description": "Objects with Links grouped by \"relation\" (i.e. Atom \"rel\" attribute).",
+   "type": "object",
+   "properties": {
+    "type": {
+     "type": "string",
+     "enum": [
+      "Links"
+     ]
+    },
+    "qualityReport": {
+     "type": "array",
+     "items": {
+      "$ref": "#/definitions/Link"
+     }
+    },
+    "previews": {
+     "type": "array",
+     "items": {
+      "$ref": "#/definitions/Link"
+     }
+    },
+    "via": {
+     "type": "array",
+     "items": {
+      "$ref": "#/definitions/Link"
+     }
+    },
+    "data": {
+     "type": "array",
+     "items": {
+      "$ref": "#/definitions/Link"
+     }
+    },
+    "up": {
+     "type": "array",
+     "items": {
+      "$ref": "#/definitions/Link"
+     }
+    },
+    "related": {
+     "type": "array",
+     "items": {
+      "$ref": "#/definitions/Link"
+     }
+    },
+    "alternates": {
+     "type": "array",
+     "items": {
+      "$ref": "#/definitions/Link"
+     }
+    }
+   }
+  },
+  "Properties": {
+   "title": "Properties",
+   "type": "object",
+   "allOf": [
+    {
+     "type": "object",
+     "properties": {
+      "type": {
+       "type": "string",
+       "enum": [
+        "Properties"
+       ]
+      },
+      "status": {
+       "type": "string",
+       "enum": [
+        "ARCHIVED",
+        "PLANNED",
+        "ACQUIRED",
+        "CANCELLED",
+        "FAILED",
+        "POTENTIAL",
+        "REJECTED",
+        "QUALITYDEGRADED"
+       ]
+      },
+      "acquisitionInformation": {
+       "type": "array",
+       "items": {
+        "$ref": "#/definitions/AcquisitionInformation"
+       }
+      },
+      "productInformation": {
+       "$ref": "#/definitions/ProductInformation"
+      },
+      "links": {
+       "$ref": "#/definitions/Links"
+      },
+      "offerings": {
+       "description": "OGC 14-055r2",
+       "type": "array",
+       "items": {
+        "$ref": "#/definitions/Offering"
+       }
+      }
+     },
+     "required": [
+      "status",
+      "acquisitionInformation",
+      "links"
+     ]
+    },
+    {
+     "$ref": "#/definitions/DataIdentification"
+    },
+    {
+     "$ref": "#/definitions/MetadataInformation"
+    }
+   ]
+  },
+  "EarthObservation": {
+   "description": "GeoJSON Feature",
+   "type": "object",
+   "properties": {
+    "@context": {
+     "type": "string"
+    },
+    "type": {
+     "title": "type",
+     "type": "string",
+     "enum": [
+      "Feature"
+     ]
+    },
+    "id": {
+     "type": "string",
+     "format": "uri"
+    },
+    "geometry": {
+     "oneOf": [
+      {
+       "$ref": "#/definitions/Geometry"
+      },
+      {
+       "type": "null"
+      }
+     ]
+    },
+    "properties": {
+     "$ref": "#/definitions/Properties"
+    },
+    "bbox": {
+     "type": "array",
+     "minItems": 4,
+     "maxItems": 4,
+     "items": {
+      "type": "number"
+     }
+    }
+   },
+   "required": [
+    "type",
+    "id",
+    "geometry",
+    "properties"
+   ],
+   "additionalProperties": false
+  },
+  "Platform": {
+   "type": "object",
+   "minProperties": 1,
+   "properties": {
+    "type": {
+     "type": "string",
+     "enum": [
+      "Platform"
+     ]
+    },
+    "id": {
+     "type": "string",
+     "format": "uri"
+    },
+    "platformShortName": {
+     "type": "string"
+    },
+    "platformSerialIdentifier": {
+     "type": "string"
+    },
+    "orbitType": {
+     "type": "string",
+     "enum": [
+      "GEO",
+      "LEO"
+     ]
+    }
+   },
+   "required": [
+    "platformShortName"
+   ],
+   "additionalProperties": false
+  },
+  "Instrument": {
+   "type": "object",
+   "properties": {
+    "type": {
+     "type": "string",
+     "enum": [
+      "Instrument"
+     ]
+    },
+    "id": {
+     "type": "string",
+     "format": "uri"
+    },
+    "sensorType": {
+     "type": "string",
+     "enum": [
+      "OPTICAL",
+      "RADAR",
+      "ATMOSPHERIC",
+      "ALTIMETRIC",
+      "LIMB"
+     ]
+    },
+    "instrumentShortName": {
+     "type": "string"
+    },
+    "description": {
+     "type": "string"
+    }
+   },
+   "required": [
+    "instrumentShortName"
+   ],
+   "additionalProperties": false
+  },
+  "AcquisitionParameters": {
+   "type": "object",
+   "allOf": [
+    {
+     "type": "object",
+     "properties": {
+      "acquisitionType": {
+       "type": "string",
+       "enum": [
+        "NOMINAL",
+        "CALIBRATION",
+        "OTHER"
+       ]
+      },
+      "acquisitionSubType": {
+       "type": "string"
+      },
+      "startTimeFromAscendingNode": {
+       "type": "integer",
+       "minimum": 0
+      },
+      "completionTimeFromAscendingNode": {
+       "type": "integer",
+       "minimum": 0
+      },
+      "relativeOrbitNumber": {
+       "type": "integer"
+      },
+      "wrsLongitude": {
+       "type": "string"
+      },
+      "wrsLatitude": {
+       "type": "string"
+      },
+      "tileId": {
+       "type": "string"
+      },
+      "groundTrackUncertainty": {
+       "type": "number"
+      },
+      "cycleNumber": {
+       "type": "integer",
+       "minimum": 0
+      },
+      "antennaLookDirection": {
+       "type": "string",
+       "enum": [
+        "LEFT",
+        "RIGHT"
+       ]
+      },
+      "acquisitionStation": {
+       "type": "string"
+      },
+      "acquisitionAngles": {
+       "$ref": "#/definitions/AcquisitionAngles"
+      },
+      "operationalMode": {
+       "type": "string"
+      },
+      "swathIdentifier": {
+       "type": "string"
+      },
+      "polarisationMode": {
+       "description": "Sar",
+       "type": "string",
+       "enum": [
+        "S",
+        "D",
+        "T",
+        "Q",
+        "UNDEFINED"
+       ]
+      },
+      "polarisationChannels": {
+       "description": "Sar",
+       "type": "string"
+      },
+      "resolution": {
+       "type": "number"
+      },
+      "verticalResolution": {
+       "description": "Atm, Lmb",
+       "type": "number"
+      },
+      "waveLengths": {
+       "type": "array",
+       "minItems": 1,
+       "items": {
+        "$ref": "#/definitions/WavelengthInformation"
+       }
+      },
+      "measurementType": {
+       "type": "string",
+       "enum": [
+        "ABSORPTION",
+        "EMISSION"
+       ]
+      },
+      "dopplerFrequency": {
+       "description": "Sar",
+       "type": "number",
+       "minimum": 0,
+       "exclusiveMinimum": true
+      },
+      "samplingRates": {
+       "description": "Alt",
+       "type": "array",
+       "items": {
+        "type": "number",
+        "minimum": 0,
+        "exclusiveMinimum": true
+       }
+      }
+     },
+     "required": [
+      "acquisitionType"
+     ]
+    },
+    {
+     "$ref": "#/definitions/TemporalInformation"
+    },
+    {
+     "$ref": "#/definitions/VerticalSpatialDomain"
+    },
+    {
+     "$ref": "#/definitions/OrbitParameters"
+    }
+   ]
+  },
+  "Link": {
+   "type": "object",
+   "properties": {
+    "href": {
+     "type": "string",
+     "format": "uri"
+    },
+    "type": {
+     "type": "string"
+    },
+    "title": {
+     "type": "string"
+    },
+    "length": {
+     "type": "integer",
+     "minimum": 0
+    },
+    "category": {
+     "description": "Media category property defined by MediaRSS.",
+     "type": "string",
+     "enum": [
+      "THUMBNAIL",
+      "QUICKLOOK",
+      "ALBUM",
+      "CLOUD",
+      "SNOW",
+      "QUALITY"
+     ]
+    },
+    "expression": {
+     "description": "Media expression property defined by MediaRSS.",
+     "type": "string",
+     "enum": [
+      "full",
+      "sample"
+     ]
+    },
+    "conformsTo": {
+     "type": "string",
+     "format": "uri"
+    }
+   },
+   "required": [
+    "href"
+   ],
+   "additionalProperties": false
+  },
+  "ProductInformation": {
+   "type": "object",
+   "allOf": [
+    {
+     "type": "object",
+     "properties": {
+      "type": {
+       "type": "string",
+       "enum": [
+        "ProductInformation"
+       ]
+      },
+      "productType": {
+       "type": "string"
+      },
+      "size": {
+       "type": "integer"
+      },
+      "productVersion": {
+       "type": "string"
+      },
+      "statusSubType": {
+       "type": "string",
+       "enum": [
+        "ON-LINE",
+        "OFF-LINE"
+       ]
+      },
+      "qualityInformation": {
+       "$ref": "#/definitions/QualityInformation"
+      },
+      "statusDetail": {
+       "type": "string"
+      },
+      "availabilityTime": {
+       "type": "string",
+       "format": "date-time"
+      },
+      "timeliness": {
+       "type": "string"
+      },
+      "productGroupId": {
+       "type": "string"
+      },
+      "archivingCenter": {
+       "type": "string"
+      },
+      "referenceSystemIdentifier": {
+       "type": "string"
+      },
+      "archivingDate": {
+       "type": "string",
+       "format": "date-time"
+      }
+     },
+     "required": [
+      "availabilityTime"
+     ]
+    },
+    {
+     "$ref": "#/definitions/ProcessingInformation"
+    },
+    {
+     "$ref": "#/definitions/CoverageDescription"
+    }
+   ]
+  },
+  "AcquisitionAngles": {
+   "type": "object",
+   "properties": {
+    "illuminationAzimuthAngle": {
+     "type": "number"
+    },
+    "illuminationZenithAngle": {
+     "type": "number"
+    },
+    "illuminationElevationAngle": {
+     "type": "number"
+    },
+    "incidenceAngle": {
+     "type": "number"
+    },
+    "minimumIncidenceAngle": {
+     "type": "number"
+    },
+    "maximumIncidenceAngle": {
+     "type": "number"
+    },
+    "incidenceAngleVariation": {
+     "type": "number"
+    },
+    "acrossTrackIncidenceAngle": {
+     "type": "number"
+    },
+    "alongTrackIncidenceAngle": {
+     "type": "number"
+    },
+    "instrumentAzimuthAngle": {
+     "type": "number"
+    },
+    "instrumentZenithAngle": {
+     "type": "number"
+    },
+    "instrumentElevationAngle": {
+     "type": "number"
+    },
+    "pitch": {
+     "type": "number"
+    },
+    "roll": {
+     "type": "number"
+    },
+    "yaw": {
+     "type": "number"
+    }
+   },
+   "additionalProperties": false
+  },
+  "QualityInformation": {
+   "description": "Extended QualityInformation defined in OGC 17-003",
+   "type": "object",
+   "allOf": [
+    {
+     "type": "object",
+     "properties": {
+      "qualityStatus": {
+       "type": "string",
+       "enum": [
+        "NOMINAL",
+        "DEGRADED"
+       ]
+      },
+      "qualityDegradation": {
+       "description": "Percentage",
+       "type": "number"
+      },
+      "qualityDegradationTag": {
+       "type": "string"
+      },
+      "qualityDegradationQuotationMode": {
+       "type": "string",
+       "enum": [
+        "AUTOMATIC",
+        "MANUAL"
+       ]
+      }
+     }
+    },
+    {
+     "type": "object",
+     "properties": {
+      "qualityIndicators": {
+       "type": "array",
+       "items": {
+        "$ref": "#/definitions/QualityIndicator"
+       }
+      }
+     }
+    }
+   ]
+  },
+  "CoverageDescription": {
+   "description": "Subset of ProductInformation",
+   "type": "object",
+   "properties": {
+    "cloudCover": {
+     "type": "number"
+    },
+    "snowCover": {
+     "type": "number"
+    }
+   }
+  },
+  "FeatureCollection": {
+   "description": "GeoJSON FeatureCollection",
+   "type": "object",
+   "properties": {
+    "type": {
+     "type": "string",
+     "enum": [
+      "FeatureCollection"
+     ]
+    },
+    "bbox": {
+     "type": "array"
+    },
+    "features": {
+     "type": "array",
+     "minItems": 0,
+     "items": {
+      "$ref": "#/definitions/EarthObservation"
+     }
+    }
+   },
+   "required": [
+    "type",
+    "features"
+   ]
+  },
+  "WavelengthInformation": {
+   "type": "object",
+   "minProperties": 1,
+   "properties": {
+    "type": {
+     "type": "string",
+     "enum": [
+      "WavelengthInformation"
+     ]
+    },
+    "discreteWavelengths": {
+     "type": "array",
+     "minItems": 1,
+     "items": {
+      "type": "number",
+      "minimum": 0,
+      "exclusiveMinimum": true
+     }
+    },
+    "endWavelength": {
+     "type": "number",
+     "minimum": 0,
+     "exclusiveMinimum": true
+    },
+    "spectralRange": {
+     "type": "string",
+     "enum": [
+      "INFRARED",
+      "NIR",
+      "SWIR",
+      "MWIR",
+      "LWIR",
+      "FIR",
+      "UV",
+      "VISIBLE",
+      "MICROWAVE",
+      "OTHER"
+     ]
+    },
+    "startWavelength": {
+     "type": "number",
+     "minimum": 0,
+     "exclusiveMinimum": true
+    },
+    "wavelengthResolution": {
+     "type": "number"
+    }
+   },
+   "additionalProperties": false
+  },
+  "VerticalSpatialDomain": {
+   "description": "Subset of AcquisitionParameters",
+   "type": "object",
+   "properties": {
+    "highestLocation": {
+     "type": "string"
+    },
+    "lowestLocation": {
+     "type": "string"
+    },
+    "locationUnit": {
+     "type": "string",
+     "enum": [
+      "bar",
+      "m"
+     ]
+    }
+   }
+  },
+  "TemporalInformation": {
+   "description": "Subset of AcquisitionParameters",
+   "type": "object",
+   "properties": {
+    "beginningDateTime": {
+     "type": "string",
+     "format": "date-time"
+    },
+    "endingDateTime": {
+     "type": "string",
+     "format": "date-time"
+    }
+   },
+   "required": [
+    "beginningDateTime",
+    "endingDateTime"
+   ]
+  },
+  "AcquisitionInformation": {
+   "type": "object",
+   "properties": {
+    "type": {
+     "type": "string",
+     "enum": [
+      "AcquisitionInformation"
+     ]
+    },
+    "platform": {
+     "$ref": "#/definitions/Platform"
+    },
+    "instrument": {
+     "$ref": "#/definitions/Instrument"
+    },
+    "acquisitionParameters": {
+     "$ref": "#/definitions/AcquisitionParameters"
+    }
+   }
+  },
+  "Offering": {
+   "title": "Offering",
+   "description": "Offering as defined in OGC 14-055r2",
+   "type": "object",
+   "properties": {
+    "code": {
+     "type": "string",
+     "format": "uri"
+    },
+    "operations": {
+     "type": "array",
+     "items": {
+      "$ref": "#/definitions/Operation"
+     }
+    },
+    "contents": {
+     "type": "array"
+    },
+    "styles": {
+     "type": "array"
+    }
+   },
+   "required": [
+    "code"
+   ]
+  },
+  "OrbitParameters": {
+   "description": "Subset of AcquisitionParameters",
+   "type": "object",
+   "properties": {
+    "orbitDirection": {
+     "type": "string",
+     "enum": [
+      "ASCENDING",
+      "DESCENDING"
+     ]
+    },
+    "lastOrbitDirection": {
+     "type": "string",
+     "enum": [
+      "ASCENDING",
+      "DESCENDING"
+     ]
+    },
+    "orbitDuration": {
+     "type": "integer"
+    },
+    "ascendingNodeDate": {
+     "type": "string",
+     "format": "date-time"
+    },
+    "ascendingNodeLongitude": {
+     "type": "number"
+    },
+    "orbitNumber": {
+     "type": "integer",
+     "minimum": 0
+    },
+    "lastOrbitNumber": {
+     "type": "number"
+    }
+   }
+  },
+  "Operation": {
+   "description": "OGC 14-055r2",
+   "type": "object",
+   "properties": {
+    "code": {
+     "type": "string",
+     "format": "uri"
+    },
+    "method": {
+     "type": "string",
+     "enum": [
+      "GET",
+      "POST",
+      "PUT",
+      "HEAD",
+      "PATCH",
+      "DELETE"
+     ]
+    },
+    "type": {
+     "description": "Media type",
+     "type": "string"
+    },
+    "href": {
+     "type": "string",
+     "format": "uri"
+    },
+    "request": {
+     "type": "object"
+    },
+    "result": {
+     "type": "object"
+    }
+   },
+   "required": [
+    "code",
+    "method",
+    "href"
+   ]
+  },
+  "DeliveryControlInformation": {
+   "description": "Results of QCMMS check 2",
+   "type": "object",
+   "allOf": [
+    {
+     "type": "object",
+     "properties": {
+      "status": {
+       "type": "string",
+       "enum": [
+        "WAITING",
+        "IN_PROGRESS",
+        "FINISHED",
+        "NOT_AVAILABLE"
+       ]
+      },
+      "complete": {
+       "type": "boolean"
+      },
+      "date": {
+       "type": "string",
+       "format": "date-time"
+      },
+      "filename": {
+       "type": "string"
+      }
+     }
+    },
+    {
+     "$ref": "#/definitions/QualityMeasurement"
+    }
+   ]
+  },
+  "TileRasterInformation": {
+   "description": "Encapsulate the raster information for a specific tile in case of ordinary control with several tiles",
+   "type": "object",
+   "properties": {
+    "id": {
+     "type": "string"
+    },
+    "raster": {
+     "type": "object",
+     "$ref": "#/definitions/RasterInformation"
+    }
+   },
+   "required": [
+    "id",
+    "raster"
+   ]
+  },
+  "HarmonizedRasterInformation": {
+   "description": "Extension of raster information to provide information at the file level",
+   "type": "object",
+   "properties": {
+    "lineage": {
+     "type": "string",
+     "format": "uri"
+    },
+    "tile": {
+     "type": "array",
+     "items": {
+      "$ref": "#/definitions/TileRasterInformation"
+     }
+    }
+   }
+  },
+  "OrdinaryControlInformation": {
+   "description": "Results of QCMMS check 3A",
+   "type": "object",
+   "allOf": [
+    {
+     "type": "object",
+     "patternProperties": {
+      "^(level1|level2)$": {
+       "$ref": "#/definitions/RasterInformation"
+      }
+     }
+    },
+    {
+     "type": "object",
+     "properties": {
+      "harmonized": {
+       "$ref": "#/definitions/HarmonizedRasterInformation"
+      }
+     }
+    },
+    {
+     "$ref": "#/definitions/QualityMeasurement"
+    }
+   ]
+  },
+  "BaseTileDetailedControlInformation": {
+   "type": "object",
+   "oneOf": [
+    {
+     "$ref": "#/definitions/TileDetailedControlInformation"
+    },
+    {
+     "$ref": "#/definitions/BaseDetailedControlInformation"
+    }
+   ]
+  },
+  "DetailedControlInformation": {
+   "description": "Results of QCMMS check 3B",
+   "type": "object",
+   "allOf": [
+    {
+     "$ref": "#/definitions/TileDetailedControlInformation"
+    },
+    {
+     "$ref": "#/definitions/BaseDetailedControlInformation"
+    },
+    {
+     "$ref": "#/definitions/QualityMeasurement"
+    }
+   ]
+  },
+  "TileDetailedControlInformation": {
+   "type": "object",
+   "allOf": [
+    {
+     "type": "object",
+     "properties": {
+      "tile": {
+       "type": "array",
+       "items": {
+        "$ref": "#/definitions/TileDetailedControlInformationItem"
+       }
+      }
+     }
+    }
+   ]
+  },
+  "TileDetailedControlInformationItem": {
+   "description": "Extension of BaseDetailelControlInformation to include TiledId",
+   "type": "object",
+   "allOf": [
+    {
+     "$ref": "#/definitions/BaseDetailedControlInformation"
+    },
+    {
+     "properties": {
+      "id": {
+       "type": "string"
+      }
+     }
+    }
+   ]
+  },
+  "BaseDetailedControlInformation": {
+   "description": "Results of QCMMS check 3B",
+   "type": "object",
+   "allOf": [
+    {
+     "type": "object",
+     "properties": {
+      "cloudCover": {
+       "type": "array",
+       "items": {
+        "$ref": "#/definitions/CloudCoverInformation"
+       }
+      },
+      "geometry": {
+       "type": "array",
+       "items": {
+        "$ref": "#/definitions/GeometryInformation"
+       }
+      },
+      "radiometry": {
+       "type": "array",
+       "items": {
+        "$ref": "#/definitions/RadiometryInformation"
+       }
+      },
+      "validPixels": {
+       "type": "array",
+       "items": {
+        "$ref": "#/definitions/PixelInformation"
+       }
+      }
+     }
+    }
+   ]
+  },
+  "ReferenceInformation": {
+   "description": "Part of RadiometryConsistencyInformation",
+   "type": "object",
+   "properties": {
+    "category": {
+     "type": "string"
+    },
+    "title": {
+     "type": "string"
+    }
+   },
+   "required": [
+    "category",
+    "title"
+   ]
+  },
+  "BandTemporalConsistencyInformation": {
+   "description": "Part of RadiometryConsistencyInformation",
+   "type": "object",
+   "properties": {
+    "id": {
+     "type": "string"
+    },
+    "tc16Sd": {
+     "type": "number"
+    },
+    "tsiCE90": {
+     "type": "number"
+    }
+   },
+   "required": [
+    "id"
+   ]
+  },
+  "RadiometryConsistencyInformation": {
+   "description": "Part of HarmonizationControlInformation",
+   "type": "object",
+   "properties": {
+    "id": {
+     "type": "string",
+     "format": "uri"
+    },
+    "lineage": {
+     "type": "string",
+     "format": "uri"
+    },
+    "references": {
+     "type": "array",
+     "items": {
+      "$ref": "#/definitions/ReferenceInformation"
+     }
+    },
+    "bandsTemporalConsistency": {
+     "type": "array",
+     "items": {
+      "$ref": "#/definitions/BandTemporalConsistencyInformation"
+     }
+    }
+   },
+   "required": [
+    "id",
+    "bandsTemporalConsistency"
+   ]
+  },
+  "HarmonizationControlInformation": {
+   "description": "Results of QCMMS check 4A",
+   "type": "object",
+   "allOf": [
+    {
+     "type": "object",
+     "properties": {
+      "geometryConsistency": {
+       "type": "array",
+       "items": {
+        "$ref": "#/definitions/GeometryInformation"
+       }
+      },
+      "radiometryConsistency": {
+       "type": "array",
+       "items": {
+         "$ref": "#/definitions/RadiometryConsistencyInformation"
+       }
+      }
+     }
+    },
+    {
+     "$ref": "#/definitions/QualityMeasurement"
+    }
+   ]
+  },
+  "IpForLpInformation": {
+   "description": "Results of QCMMS check 4B",
+   "type": "object",
+   "allOf": [
+    {
+     "type": "object",
+     "properties": {
+      "vpxCoverage": {
+       "type": "object",
+       "$ref": "#/definitions/VpxCoverageInformation"
+      },
+      "fitnessForPurpose": {
+       "type": "string",
+       "enum": [
+        "FULL",
+        "PARTIAL",
+        "NO"
+       ]
+      },
+      "lineage": {
+       "type": "string",
+       "format": "uri"
+      }
+     }
+    },
+    {
+     "$ref": "#/definitions/QualityMeasurement"
+    }
+   ]
+  },
+  "VpxCoverageInformation": {
+   "type": "object",
+   "additionalProperties": false,
+   "patternProperties": {
+    "^[1-2][0-9]{3}$": {
+     "type": "object",
+     "properties": {
+      "min": {
+       "type": "integer"
+      },
+      "max": {
+       "type": "integer"
+      },
+      "gapPct": {
+       "type": "number"
+      },
+      "mask": {
+       "type": "string",
+       "format": "uri"
+      }
+     }
+    }
+   }
+  },
+  "LpInterpretationInformation": {
+   "description": "Results of QCMMS check 5",
+   "type": "object",
+   "allOf": [
+    {
+     "type": "object",
+     "properties": {
+      "classification": {
+       "type": "object",
+       "$ref": "#/definitions/ClassificationInformation"
+      },
+      "densityCover": {
+       "type": "object",
+       "$ref": "#/definitions/DensityCoverInformation"
+      }
+     }
+    },
+    {
+     "$ref": "#/definitions/QualityMeasurement"
+    }
+   ]
+  },
+  "DensityCoverInformation": {
+   "description": "Part of LpInterpretationInformation",
+   "type": "object",
+   "properties": {
+    "mae": {
+     "type": "number"
+    },
+    "mse": {
+     "type": "number"
+    },
+    "rmse": {
+     "type": "number"
+    },
+    "pearsonR": {
+     "type": "number"
+    },
+    "lineage": {
+     "type": "string",
+     "format": "uri"
+    },
+    "codingValues": {
+     "type": "object"
+    }
+   }
+  },
+  "LpMetadataControlInformation": {
+   "description": "Part of QCMMS check 6a Land Product Validation",
+   "type": "object",
+   "allOf": [
+    {
+     "$ref": "#/definitions/QualityMeasurement"
+    },
+    {
+     "type": "object",
+     "properties": {
+      "metadataAvailable": {
+       "type": "boolean"
+      },
+      "metadataSpecification": {
+       "type": "string"
+      },
+      "metadataCompliancy": {
+       "type": "boolean"
+      }
+     }
+    }
+   ]
+  },
+  "LpOrdinaryControlInformation": {
+   "description": "Part of QCMMS check 6b Land Product Validation",
+   "type": "object",
+   "allOf": [
+    {
+     "$ref": "#/definitions/QualityMeasurement"
+    },
+    {
+     "type": "object",
+     "properties": {
+      "read": {
+       "type": "boolean"
+      },
+      "xRes": {
+       "type": "number"
+      },
+      "yRes": {
+       "type": "number"
+      },
+      "epsg": {
+       "type": "string"
+      },
+      "dataType": {
+       "type": "string"
+      },
+      "rasterFormat": {
+       "type": "string"
+      },
+      "extentUlLr": {
+       "type": "array",
+       "items": {
+        "type": "number"
+       }
+      },
+      "aoiCoveragePct": {
+       "type": "number"
+      }
+     }
+    }
+   ]
+  },
+  "LpThematicValidationInformation": {
+   "description": "Part of QCMMS check 6c Land Product Validation",
+   "type": "object",
+   "allOf": [
+    {
+     "type": "object",
+     "properties": {
+      "classification": {
+       "type": "object",
+       "$ref": "#/definitions/ClassificationInformation"
+      },
+      "densityCover": {
+       "type": "object",
+       "$ref": "#/definitions/DensityCoverInformation"
+      }
+     }
+    },
+    {
+     "$ref": "#/definitions/QualityMeasurement"
+    }
+   ]
+  },
+  "ClassificationInformation": {
+   "description": "Part of LpThematicValidationInformation and LpInterpretationInformation",
+   "type": "object",
+   "properties": {
+    "codingClasses": {
+     "type": "array",
+     "minItems": 2,
+     "items": {
+      "type": "string"
+     }
+    },
+    "lineage": {
+     "type": "string",
+     "format": "uri"
+    },
+    "overallAccuracy": {
+     "type": "number"
+    },
+    "producersAccuracy": {
+     "type": "number"
+    },
+    "usersAccuracy": {
+     "type": "number"
+    },
+    "kappa": {
+     "type": "number"
+    },
+    "confusionMatrix": {
+     "type": "array",
+     "minItems": 2,
+     "items": {
+      "type": "array",
+      "minItems": 2,
+      "items": {
+       "type": "integer"
+      }
+     }
+    }
+   },
+   "required": [
+    "codingClasses"
+   ]
+  },
+  "QualityMeasurement": {
+   "description": "dqv:QualityMeasurement",
+   "type": "object",
+   "properties": {
+    "type": {
+     "type": "string",
+     "enum": [
+      "QualityMeasurement"
+     ]
+    },
+    "isMeasurementOf": {
+     "description": "dqv:isMeasurementOf",
+     "type": "string",
+     "format": "uri",
+     "enum": [
+      "http://qcmms.esa.int/quality-indicators/#degradedAncillaryDataPercentageMetric",
+      "http://qcmms.esa.int/quality-indicators/#sensorQualityMetric",
+      "http://qcmms.esa.int/quality-indicators/#radiometricQualityMetric",
+      "http://qcmms.esa.int/quality-indicators/#degradedDataPercentageMetric",
+      "http://qcmms.esa.int/quality-indicators/#geometricQualityMetric",
+      "http://qcmms.esa.int/quality-indicators/#generalQualityMetric",
+      "http://qcmms.esa.int/quality-indicators/#formatCorrectnessMetric",
+      "http://qcmms.esa.int/quality-indicators/#feasibilityControlMetric",
+      "http://qcmms.esa.int/quality-indicators/#deliveryControlMetric",
+      "http://qcmms.esa.int/quality-indicators/#ordinaryControlMetric",
+      "http://qcmms.esa.int/quality-indicators/#detailedControlMetric",
+      "http://qcmms.esa.int/quality-indicators/#harmonizationControlMetric",
+      "http://qcmms.esa.int/quality-indicators/#ipForLpInformationMetric",
+      "http://qcmms.esa.int/quality-indicators/#lpInterpretationMetric",
+      "http://qcmms.esa.int/quality-indicators/#lpMetadataControlMetric",
+      "http://qcmms.esa.int/quality-indicators/#lpOrdinaryControlMetric",
+      "http://qcmms.esa.int/quality-indicators/#lpThematicValidationMetric"
+     ]
+    },
+    "value": {
+     "description": "dqv:value"
+    },
+    "generatedAtTime": {
+     "description": "prov:generatedAtTime",
+     "type": "string",
+     "format": "date-time"
+    }
+   },
+   "required": [
+    "isMeasurementOf",
+    "value"
+   ]
+  },
+  "FeasibilityControlInformation": {
+   "description": "Results of QCMMS check 1",
+   "type": "object",
+   "allOf": [
+    {
+     "$ref": "#/definitions/QualityMeasurement"
+    },
+    {
+     "type": "object",
+     "properties": {
+      "searchDate": {
+       "type": "string",
+       "format": "date-time"
+      },
+      "searchDateUpdate": {
+       "type": "string",
+       "format": "date-time"
+      }
+     }
+    }
+   ]
+  },
+  "QualityIndicator": {
+   "type": "object",
+   "allOf": [
+    {
+     "$ref": "#/definitions/QualityMeasurement"
+    },
+    {
+     "$ref": "#/definitions/FeasibilityControlInformation"
+    },
+    {
+     "$ref": "#/definitions/DeliveryControlInformation"
+    },
+    {
+     "$ref": "#/definitions/OrdinaryControlInformation"
+    },
+    {
+     "$ref": "#/definitions/DetailedControlInformation"
+    },
+    {
+     "$ref": "#/definitions/HarmonizationControlInformation"
+    },
+    {
+     "$ref": "#/definitions/IpForLpInformation"
+    },
+    {
+     "$ref": "#/definitions/LpInterpretationInformation"
+    },
+    {
+     "$ref": "#/definitions/LpMetadataControlInformation"
+    },
+    {
+     "$ref": "#/definitions/LpOrdinaryControlInformation"
+    },
+    {
+     "$ref": "#/definitions/LpThematicValidationInformation"
+    }
+   ]
+  },
+  "BandInformation": {
+   "type": "object",
+   "properties": {
+    "id": {
+     "type": "string"
+    },
+    "bits": {
+     "type": "integer"
+    },
+    "resolution": {
+     "type": "number"
+    },
+    "cols": {
+     "type": "integer"
+    },
+    "rows": {
+     "type": "integer"
+    }
+   },
+   "required": [
+    "id"
+   ]
+  },
+  "GeometryInformation": {
+   "description": "Part of DetailedQualityInformation and HarmonizationControlInformation",
+   "type": "object",
+   "properties": {
+    "id": {
+     "type": "string"
+    },
+    "validGCPs": {
+     "type": "integer"
+    },
+    "rmseX": {
+     "type": "number"
+    },
+    "rmseY": {
+     "type": "number"
+    },
+    "diffXmax": {
+     "type": "number"
+    },
+    "diffYmax": {
+     "type": "number"
+    },
+    "medianAbsShift": {
+     "type": "number"
+    },
+    "coregistrationErrorReductionPct": {
+     "type": "number"
+    },
+    "mask": {
+     "type": "string",
+     "format": "uri"
+    },
+    "lineage": {
+     "type": "string",
+     "format": "uri"
+    },
+    "requirement": {
+     "type": "boolean"
+    }
+   },
+   "required": [
+    "id"
+   ]
+  },
+  "RadiometryInformation": {
+   "description": "Part of DetailedQualityInformation",
+   "type": "object",
+   "properties": {
+    "id": {
+     "type": "string"
+    },
+    "noRqSatPx": {
+     "type": "integer"
+    },
+    "rqSatPct": {
+     "type": "number"
+    },
+    "mask": {
+     "type": "string",
+     "format": "uri"
+    },
+    "lineage": {
+     "type": "string",
+     "format": "uri"
+    }
+   }
+  },
+  "CloudCoverInformation": {
+   "description": "Part of DetailedQualityInformation",
+   "type": "object",
+   "properties": {
+    "id": {
+     "type": "string"
+    },
+    "cloudPct": {
+     "type": "integer",
+     "minimum": 0,
+     "maximum": 100
+    },
+    "mask": {
+     "type": "string",
+     "format": "uri"
+    },
+    "lineage": {
+     "type": "string",
+     "format": "uri"
+    },
+    "noDataPct": {
+     "type": "integer",
+     "minimum": 0,
+     "maximum": 100
+    },
+    "cirrusPct": {
+     "type": "integer",
+     "minimum": 0,
+     "maximum": 100
+    },
+    "snowPct": {
+     "type": "integer",
+     "minimum": 0,
+     "maximum": 100
+    },
+    "waterPct": {
+     "type": "integer",
+     "minimum": 0,
+     "maximum": 100
+    },
+    "validPct": {
+     "type": "integer",
+     "minimum": 0,
+     "maximum": 100
+    }
+   }
+  },
+  "PixelInformation": {
+   "description": "Part of DetailedQualityInformation",
+   "type": "object",
+   "properties": {
+    "id": {
+     "type": "string"
+    },
+    "validPct": {
+     "type": "integer",
+     "minimum": 0,
+     "maximum": 100
+    },
+    "mask": {
+     "type": "string",
+     "format": "uri"
+    },
+    "lineage": {
+     "type": "string",
+     "format": "uri"
+    }
+   }
+  },
+  "RasterInformation": {
+   "type": "object",
+   "properties": {
+    "rastersComplete": {
+     "type": "boolean"
+    },
+    "calibrationMetadata": {
+     "type": "boolean"
+    },
+    "rastersRead": {
+     "type": "boolean"
+    },
+    "metadataRead": {
+     "type": "boolean"
+    },
+    "bits": {
+     "type": "integer"
+    },
+    "cols": {
+     "type": "integer"
+    },
+    "rows": {
+     "type": "integer"
+    },
+    "channels": {
+     "type": "integer"
+    },
+    "bands": {
+     "type": "array",
+     "items": {
+      "$ref": "#/definitions/BandInformation"
+     }
+    },
+    "format": {
+     "type": "string"
+    },
+    "epsg": {
+     "type": "integer"
+    },
+    "xGeoRef": {
+     "type": "number"
+    },
+    "yGeoRef": {
+     "type": "number"
+    },
+    "xCellRes": {
+     "type": "number"
+    },
+    "yCellRes": {
+     "type": "number"
+    },
+    "resampling": {
+     "type": "string",
+     "enum": [
+      "CUBIC"
+     ]
+    },
+    "resolution": {
+     "type": "number"
+    },
+    "characteristicsCompliant": {
+     "type": "boolean"
+    },
+    "lineage": {
+     "type": "string",
+     "format": "uri"
+    }
+   },
+   "additionalProperties": false
+  }
+ }
+}

@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema targetNamespace="http://www.copernicus.eu" elementFormDefault="qualified" version="1.0.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:gco="http://www.isotc211.org/2005/gco" xmlns:lnd="http://www.copernicus.eu" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sch="http://www.ascc.net/xml/schematron" xmlns:gmd="http://www.isotc211.org/2005/gmd">
+    <!-- 
+        /**
+        *
+        * 
+        *
+        */
+    -->
+    <!-- ================================= Annotation ================================ -->
+    <xs:annotation>
+        <xs:documentation>CDI profile schema definition. Valid CDI documents should validate both against this
+            XSD schema and the correspondent Schematron rules.</xs:documentation>
+    </xs:annotation>
+    <!-- ================================== Imports & Includes ================================== -->
+    <!-- Links to schemas -->
+    <xs:import namespace="http://www.isotc211.org/2005/gmd" schemaLocation="http://schemas.opengis.net/iso/19139/20060504/gmd/gmd.xsd"/>
+    <xs:import namespace="http://www.isotc211.org/2005/gmx" schemaLocation="http://schemas.opengis.net/iso/19139/20060504/gmx/gmx.xsd"/>
+    <xs:import namespace="http://www.isotc211.org/2005/gco" schemaLocation="http://schemas.opengis.net/iso/19139/20060504/gco/gcoBase.xsd"/>
+
+    <!-- Extended MD_Metadata element -->    
+    <!-- =========================================================================== -->
+    
+    <!-- bibliographic information -->
+    <xs:element name="additionalDocumentation" type="lnd:LND_Citation_PropertyType"/>
+    
+    <xs:complexType name="LND_DataIdentification_Type">
+        <xs:annotation>
+            <xs:documentation>Standardized resource reference</xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="gmd:MD_DataIdentification_Type">
+                <xs:sequence>
+                    <xs:element name="additionalDocumentation" type="lnd:LND_Citation_PropertyType" minOccurs="0" maxOccurs="unbounded"/>
+                </xs:sequence>
+                <xs:attribute ref="gco:isoType" fixed="MD_DataIdentification_Type" use="required"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:element name="LND_DataIdentification" type="lnd:LND_DataIdentification_Type" substitutionGroup="gmd:MD_DataIdentification"/>
+        
+    
+    <xs:complexType name="LND_Citation_Type">
+        <xs:annotation>
+            <xs:documentation>Standardized resource reference</xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="gmd:CI_Citation_Type">
+                <xs:sequence>                    
+                    <xs:element name="onlineReference" type="gmd:CI_OnlineResource_PropertyType" minOccurs="0"/>
+                </xs:sequence>
+                <xs:attribute ref="gco:isoType" fixed="CI_Citation_Type" use="required"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <!-- ........................................................................ -->
+    <xs:element name="LND_Citation" type="lnd:LND_Citation_Type"/>
+    <!-- ........................................................................ -->
+    <xs:complexType name="LND_Citation_PropertyType">
+        <xs:sequence minOccurs="0">
+            <xs:element ref="lnd:LND_Citation"/>
+        </xs:sequence>
+        <xs:attributeGroup ref="gco:ObjectReference"/>
+        <xs:attribute ref="gco:nilReason"/>        
+    </xs:complexType>        
+
+
+    <!--  code lists definitions -->
+    <xs:element name="LND_FormatNameCode" type="gco:CodeListValue_Type" substitutionGroup="gco:CharacterString"/>
+    
+    <xs:complexType name="LND_FormatNameCode_PropertyType">
+        <xs:sequence minOccurs="0">
+            <xs:element ref="lnd:LND_FormatNameCode"/>
+        </xs:sequence>
+        <xs:attribute ref="gco:nilReason"/>
+    </xs:complexType>
+
+    <xs:element name="LND_HierarchyLevelNameCode" type="gco:CodeListValue_Type" substitutionGroup="gco:CharacterString"/>
+    
+    <xs:complexType name="LND_HierarchyLevelNameCode_PropertyType">
+        <xs:sequence minOccurs="0">
+            <xs:element ref="lnd:LND_HierarchyLevelNameCode"/>
+        </xs:sequence>
+        <xs:attribute ref="gco:nilReason"/>
+    </xs:complexType>
+
+    <xs:element name="LND_DeviceCategoryCode" type="gco:CodeListValue_Type" substitutionGroup="gco:CharacterString"/>
+    
+    <xs:complexType name="LND_DeviceCategoryCode_PropertyType">
+        <xs:sequence minOccurs="0">
+            <xs:element ref="lnd:LND_DeviceCategoryCode"/>
+        </xs:sequence>
+        <xs:attribute ref="gco:nilReason"/>
+    </xs:complexType>
+    
+    <xs:element name="LND_PlatformCategoryCode" type="gco:CodeListValue_Type" substitutionGroup="gco:CharacterString"/>
+    
+    <xs:complexType name="LND_PlatformCategoryCode_PropertyType">
+        <xs:sequence minOccurs="0">
+            <xs:element ref="lnd:LND_PlatformCategoryCode"/>
+        </xs:sequence>
+        <xs:attribute ref="gco:nilReason"/>
+    </xs:complexType>
+    
+    <xs:element name="LND_ParameterDiscoveryCode" type="gco:CodeListValue_Type" substitutionGroup="gco:CharacterString"/>
+    
+    <xs:complexType name="LND_ParameterDiscoveryCode_PropertyType">
+        <xs:sequence minOccurs="0">
+            <xs:element ref="lnd:LND_ParameterDiscoveryCode"/>
+        </xs:sequence>
+        <xs:attribute ref="gco:nilReason"/>
+    </xs:complexType>
+    
+    <xs:element name="LND_EDMERPCode" type="gco:CodeListValue_Type" substitutionGroup="gco:CharacterString"/>
+    
+    <xs:complexType name="LND_EDMERPCode_PropertyType">
+        <xs:sequence minOccurs="0">
+            <xs:element ref="lnd:LND_EDMERPCode"/>
+        </xs:sequence>
+        <xs:attribute ref="gco:nilReason"/>
+    </xs:complexType>
+
+    <xs:element name="LND_EDMOCode" type="gco:CodeListValue_Type" substitutionGroup="gco:CharacterString"/>
+    
+    <xs:complexType name="LND_EDMOCode_PropertyType">
+        <xs:sequence minOccurs="0">
+            <xs:element ref="lnd:LND_EDMOCode"/>
+        </xs:sequence>
+        <xs:attribute ref="gco:nilReason"/>
+    </xs:complexType>
+    
+    <xs:element name="LND_EDMEDCode" type="gco:CodeListValue_Type" substitutionGroup="gco:CharacterString"/>
+    
+    <xs:complexType name="LND_EDMEDCode_PropertyType">
+        <xs:sequence minOccurs="0">
+            <xs:element ref="lnd:LND_EDMEDCode"/>
+        </xs:sequence>
+        <xs:attribute ref="gco:nilReason"/>
+    </xs:complexType>
+    
+    <xs:element name="LND_CRSCode" type="gco:CodeListValue_Type" substitutionGroup="gco:CharacterString"/>
+    
+    <xs:complexType name="LND_CRSCode_PropertyType">
+        <xs:sequence minOccurs="0">
+            <xs:element ref="lnd:LND_CRSCode"/>
+        </xs:sequence>
+        <xs:attribute ref="gco:nilReason"/>
+    </xs:complexType>
+    
+    <xs:element name="LND_CountryCode" type="gco:CodeListValue_Type" substitutionGroup="gco:CharacterString"/>
+    
+    <xs:complexType name="LND_CountryCode_PropertyType">
+        <xs:sequence minOccurs="0">
+            <xs:element ref="lnd:LND_CountryCode"/>
+        </xs:sequence>
+        <xs:attribute ref="gco:nilReason"/>
+    </xs:complexType>
+    
+    <!-- specifics -->
+    
+    <xs:element name="LND_CSRCode" type="gco:CodeListValue_Type" substitutionGroup="gco:CharacterString"/>
+    
+    <xs:complexType name="LND_CSRCode_PropertyType">
+        <xs:sequence minOccurs="0">
+            <xs:element ref="lnd:LND_CSRCode"/>
+        </xs:sequence>
+        <xs:attribute ref="gco:nilReason"/>
+    </xs:complexType>
+
+</xs:schema>

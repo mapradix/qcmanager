@@ -1,0 +1,15 @@
+project:
+  path: ./tests/use_cases/tuc1_imd_2018_010m/
+
+processors:
+  - search
+    # - download
+    # - ordinary_control
+  - cloud_coverage
+    # - geometry_quality
+  - valid_pixels
+    # - vpx_coverage
+    # - lp_interpretation_control
+    # - lp_metadata_control
+    # - lp_ordinary_control
+    # - lp_thematic_validation_control 

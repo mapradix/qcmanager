@@ -1,0 +1,19 @@
+project:
+  path: ./tests/use_cases/tuc2_tccm_1518_020m/
+
+processors:
+  - search
+  - download
+  - l2_calibration
+  - ordinary_control
+  - harmonization_stack
+  - cloud_coverage
+  - geometry_quality
+  - harmonization_control
+  - valid_pixels
+  - lp_init
+  - vpx_coverage
+  - lp_interpretation_control
+  - lp_metadata_control
+  - lp_ordinary_control
+  - lp_thematic_validation_control

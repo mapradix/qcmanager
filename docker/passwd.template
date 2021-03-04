@@ -1,0 +1,1 @@
+INSERT RESULT OF "id -un"::INSERT RESULT OF "id -u"::::
