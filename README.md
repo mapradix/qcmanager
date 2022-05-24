@@ -1,6 +1,6 @@
 # QCMMS
 
-This repository is meant for internal Mapradix development of the QCMMS
+This repository is meant for Mapradix development of the QCMMS
 (Quality Control Metadata Management System) QC Manager subsystem.
 
 ## QC Manager
@@ -205,3 +205,7 @@ Sentinel-2:
 
 Landsat 8:  
 <https://landsat.usgs.gov/landsat-8-data-users-handbook>
+
+## Contact
+
+info at mapradix.cz
