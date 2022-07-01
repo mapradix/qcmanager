@@ -3,6 +3,9 @@
 This repository is meant for internal Mapradix development of the QCMMS
 (Quality Control Metadata Management System) QC Manager subsystem.
 
+Contact: info@mapradix.cz
+
+
 ## QC Manager
 
 The QC Manager is a part of QCMMS system responsible for the tasks related to collection 
